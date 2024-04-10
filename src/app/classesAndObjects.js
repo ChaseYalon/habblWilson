@@ -1,15 +1,26 @@
 class Clause {
-  constructor(leaning, text) {
+  constructor(leaning, text, conflictsWith = []) {
     this.leaning = leaning;
     this.text = text;
+    this.conflictsWith = conflictsWith;
+  }
+
+  checkConflicts(issue) {
+    var clauses = issue.clauses;
+    for (var i = 0; i < clauses.length; i++) {
+      if (Math.abs(this.leaning - clauses[i].leaning) > 0.6) {
+        this.conflictsWith.push(clauses[i]);
+      }
+    }
+    return this.conflictsWith;
   }
 }
 
 class Politician {
-  constructor(leaning,body,committee){
-    this.leaning=leaning
-    this.body=body
-    this.committee=committee
+  constructor(leaning, body, committee) {
+    this.leaning = leaning;
+    this.body = body;
+    this.committee = committee;
   }
 }
 
@@ -21,67 +32,77 @@ class Issue {
   }
 }
 
-var hor = {
-  reps: [], // put list of reps here
-  committees: [], // put list of committees here
-  calculateLeaning() {
-    var i = 0;
-    var leaning = 0;
-    while (i < 435) {
-      leaning += this.reps[i].leaning;
-      i++;
+class Bill {
+  constructor(issue, clauses, body, onePassed = false) {
+    this.issue = issue;
+    this.clauses = clauses;
+    this.body = body;
+    this.onePassed = onePassed;
+    this.leaning = issue.leaning;
+  }
+
+  addClause(clause) {
+    this.clauses.push(clause);
+    this.leaning += clause.leaning;
+  }
+
+  findConflictingClauses() {
+    var conflicts = [];
+    for (var i = 0; i < this.clauses.length; i++) {
+      var clauseConflicts = this.clauses[i].checkConflicts(this.issue);
+      conflicts = conflicts.concat(clauseConflicts);
     }
-    return leaning;
-  },
-  get leaning() {
-    return this.calculateLeaning();
+    return conflicts;
   }
-};
-var senate = {
-  senators: [], // put list of senators here
-  committees: [], // put list of committees here
-  calculateLeaning() {
-    var i = 0;
-    var leaning = 0;
-    while (i < 435) {
-      leaning += this.senators[i].leaning;
-      i++;
-    }
-    return leaning;
-  },
-  get leaning() {
-    return this.calculateLeaning();
-  }
-};
-class bill {
-  constructor(issue,clauses,body,onePassed,leaning){
-    this.issue=issue
-    this.clauses=clauses
-    this.body=body
-    this.onePassed=false
-    this.leaning=issue.leaning
-  }
-  addClause(clause){
-    this.clauses.push(clause)
-    this.leaning+=clause.leaning
-    
-  }
-  pass(committie,house){
-    var compromiseCoeficent=0.1
-    if(bill.leaning>0){
-      if(committie.leaning>0-compromiseCoeficent){
-        console.error('figure out how to pass bills')
-      }else {
-        console.error('figure out how to not pass bills')
+
+  pass(committee) {
+    var compromiseCoefficient = 0.1;
+
+    if (this.leaning > 0) {
+      if (committee.leaning > -compromiseCoefficient) {
+        console.log('Figure out how to pass bills');
+      } else {
+        console.log('Figure out how to not pass bills');
       }
-    }else {
-      if(committie.leaning<0+compromiseCoeficent){
-        console.error('figure out how to pass bills')
-      }else {
-        console.error('figure out how to not pass bills')
+    } else {
+      if (committee.leaning < compromiseCoefficient) {
+        console.log('Figure out how to pass bills');
+      } else {
+        console.log('Figure out how to not pass bills');
       }
     }
   }
 }
+
+var hor = {
+  reps: [], // Put list of reps here
+  committees: [], // Put list of committees here
+  calculateLeaning() {
+    var leaning = 0;
+    for (var i = 0; i < this.reps.length; i++) {
+      leaning += this.reps[i].leaning;
+    }
+    return leaning;
+  },
+  get leaning() {
+    return this.calculateLeaning();
+  }
+};
+
+var senate = {
+  senators: [], // Put list of senators here
+  committees: [], // Put list of committees here
+  calculateLeaning() {
+    var leaning = 0;
+    for (var i = 0; i < this.senators.length; i++) {
+      leaning += this.senators[i].leaning;
+    }
+    return leaning;
+  },
+  get leaning() {
+    return this.calculateLeaning();
+  }
+};
+
 // Export all the classes and the object
-module.exports = { Clause, Politician, Issue, hor,senate };
+module.exports = { Clause, Politician, Issue, Bill, hor, senate };
