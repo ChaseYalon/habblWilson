@@ -15,7 +15,7 @@ class Clause {
     return this.conflictsWith;
   }
 }
-
+//-1 =MTG (Ultra conservative) 1=Bernnie Sanders (ultra liberal) 0 = Joe Manchien (moderate)
 class Politician {
   constructor(leaning, body, committee,name) {
     this.leaning = leaning;

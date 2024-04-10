@@ -11,6 +11,9 @@ export default function Home() {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+  function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
 
   async function loadNames() {
     const data = await import('/public/names.json');
@@ -37,25 +40,42 @@ export default function Home() {
     const data = await loadNames();
     for (let i = 0; i < 100; i++) {
       createPolitician(processData(data, true), true); // For Senate
+      console.log('senate added')
+      console.log(senate)
     }
     for (let j = 0; j < 435; j++) {
       createPolitician(processData(data, false), false); // For House of Representatives
     }
+
   }
 
   function createPolitician(name, isSenate) {
     if (isSenate) {
-      var politician = new Politician(getRandomInt(-1, 1), 'Senate', '', name);
+      var politician = new Politician(getRandomArbitrary(-1, 1), 'Senate', '', name);
+      console.log('poliation got made')
+      console.log('sentate length',senate.length)
       senate.push(politician);
+      console.log('senate length after',senate.length)
     } else {
-      var politician = new Politician(getRandomInt(-1, 1), 'House', '', name);
+      var politician = new Politician(getRandomArbitrary(-1, 1), 'House', '', name);
       hor.push(politician);
     }
     politicans.push(politician);
   }
-
+  function appointPresident(name,leaning){
+    //auto sets male for president for obvious reasons, maybe fix later?
+    if(Math.abs(leaning)>1){
+      var leaning=getRandomArbitrary(-1,1)
+    }else {
+      var leaning=leaning
+    }
+    var president=new Politician(leaning,'President','',name)
+    politicans.push(president)
+    return president
+  }
   createCongress(); // Initialize the creation process
-  console.log(senate)
+  //Appoints Biden president, he is Liberal but not radical maybe move to 0.4/0.5?
+  var president=appointPresident('Joe Biden',0.3)
   return (
     <main>
       <p>It works</p>
