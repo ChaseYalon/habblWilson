@@ -17,10 +17,11 @@ class Clause {
 }
 
 class Politician {
-  constructor(leaning, body, committee) {
+  constructor(leaning, body, committee,name) {
     this.leaning = leaning;
     this.body = body;
     this.committee = committee;
+    this.name=name
   }
 }
 
