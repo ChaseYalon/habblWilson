@@ -28,21 +28,45 @@ export default function Home() {
     }
     return name.concat(' ', lastName);
   }
-
+  function loadIn() {
+    fetch('/names.json') // Changed to absolute path
+      .then(response => response.json())
+      .then(data => {
+        // Now you can use the 'data' variable here, which contains the JSON data
+        // You can add more code here to use the 'data' variable as needed
+      })
+      .catch(error => console.error('Error:', error));
+  }
+  var hor=[]
+  var senate=[]
   function createPolitician(name, senate) {
     if (senate) {
       var politician = new Politician(getRandomNumber(-1,1), 'Senate', '', name); // Adjust parameters as needed
+      senate.push(politician)
     } else {
       var politician = new Politician(getRandomNumber(-1,1), 'House', '', name); // Adjust parameters as needed
+      hor.push(politician)
     }
     politicans.push(politician)
   }
 
-  function initialize() {
-    fetch('/names.json') // Changed to absolute path
-      .then(response => response.json())
+  function createCongress(){
+    var i=0
+    var data=loadIn()
+    while(i<100){
+      createPolitician(processData(data,true))
+      i++
+    }
+    var j=0
+    while(j<435){
+      createPolitician(processData(data,false))
+      j++
+    }
+  }
 
-      .catch(error => console.error('Error:', error));
+
+  function initialize() {
+  //make it do shit    
   }
 
   initialize(); // Call the initialize function
