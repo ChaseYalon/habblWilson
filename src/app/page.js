@@ -1,11 +1,10 @@
 import Image from "next/image";
-// Adjusted to require from the same directory
-const { Clause, Politician, Issue, hor } = require('./classesAndObjects.js');
+const { Clause, Politician, Issue, hor,senate } = require('./classesAndObjects.js');
 
 export default function Home() {
   return (
     <main>
-      <p></p>
+      <p>it works</p>
     </main>
   );
 }
