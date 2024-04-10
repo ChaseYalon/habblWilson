@@ -41,13 +41,7 @@ export default function Home() {
   function initialize() {
     fetch('/names.json') // Changed to absolute path
       .then(response => response.json())
-      .then(data => {
-        const numberOfPoliticians = 10; // Set the number of Politician instances you want to create
-        for (let i = 0; i < numberOfPoliticians; i++) {
-          var name = processData(data, Math.random() < 0.5); // Randomly choose male or female name
-          createPolitician(name); // Create a Politician with the generated name
-        }
-      })
+
       .catch(error => console.error('Error:', error));
   }
 
