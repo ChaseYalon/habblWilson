@@ -1,23 +1,27 @@
 import Image from "next/image";
-const { Clause, Politician, Issue, Bill, hor, senate } = require('./classesAndObjects.js');
+const { Clause, Politician, Issue, Bill, hor, senate: senateList } = require('./classesAndObjects.js');
 
 export default function Home() {
   var politicans = [];
+  var hor = [];
+  var senate = [];
+
   function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
-  function getRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
+  async function loadNames() {
+    const data = await import('/public/names.json');
+    return data.default;
+  }
 
   function processData(data, male) {
     var lastLength = data.last.length;
     var lastName = data.last[getRandomInt(0, lastLength)];
     var name = '';
-    if (male === true) {
+    if (male) {
       var boysLength = data.boys.length;
       var firstName = data.boys[getRandomInt(0, boysLength)];
       name += firstName;
@@ -28,49 +32,30 @@ export default function Home() {
     }
     return name.concat(' ', lastName);
   }
-  function loadIn() {
-    fetch('/names.json') // Changed to absolute path
-      .then(response => response.json())
-      .then(data => {
-        // Now you can use the 'data' variable here, which contains the JSON data
-        // You can add more code here to use the 'data' variable as needed
-      })
-      .catch(error => console.error('Error:', error));
+
+  async function createCongress() {
+    const data = await loadNames();
+    for (let i = 0; i < 100; i++) {
+      createPolitician(processData(data, true), true); // For Senate
+    }
+    for (let j = 0; j < 435; j++) {
+      createPolitician(processData(data, false), false); // For House of Representatives
+    }
   }
-  var hor=[]
-  var senate=[]
-  function createPolitician(name, senate) {
-    if (senate) {
-      var politician = new Politician(getRandomNumber(-1,1), 'Senate', '', name); // Adjust parameters as needed
-      senate.push(politician)
+
+  function createPolitician(name, isSenate) {
+    if (isSenate) {
+      var politician = new Politician(getRandomInt(-1, 1), 'Senate', '', name);
+      senate.push(politician);
     } else {
-      var politician = new Politician(getRandomNumber(-1,1), 'House', '', name); // Adjust parameters as needed
-      hor.push(politician)
+      var politician = new Politician(getRandomInt(-1, 1), 'House', '', name);
+      hor.push(politician);
     }
-    politicans.push(politician)
+    politicans.push(politician);
   }
 
-  function createCongress(){
-    var i=0
-    var data=loadIn()
-    while(i<100){
-      createPolitician(processData(data,true))
-      i++
-    }
-    var j=0
-    while(j<435){
-      createPolitician(processData(data,false))
-      j++
-    }
-  }
-
-
-  function initialize() {
-  //make it do shit    
-  }
-
-  initialize(); // Call the initialize function
-
+  createCongress(); // Initialize the creation process
+  console.log(senate)
   return (
     <main>
       <p>It works</p>
