@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Head from 'next/head'; // This line imports the Head component from 'next/head'
+
 const { Clause, Politician, Issue, Bill, hor, senate: senateList } = require('./classesAndObjects.js');
 
 export default function Home() {
@@ -77,8 +79,17 @@ export default function Home() {
   //Appoints Biden president, he is Liberal but not radical maybe move to 0.4/0.5?
   var president=appointPresident('Joe Biden',0.3)
   return (
-    <main>
-      <p>It works</p>
-    </main>
+    <>
+<Head>
+  <title>My Next.js Site</title>
+  <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+</Head>
+
+      <main>
+        <p>It works</p>
+        {/* ... other content ... */}
+      </main>
+    </>
   );
 }
+
