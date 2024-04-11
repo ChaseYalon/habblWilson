@@ -1,8 +1,9 @@
 class Clause {
-  constructor(leaning, text, conflictsWith = []) {
+  constructor(Name,leaning, text, conflictsWith = []) {
     this.leaning = leaning;
     this.text = text;
     this.conflictsWith = conflictsWith;
+    this.Name=name
   }
 
   checkConflicts(issue) {
@@ -26,10 +27,30 @@ class Politician {
 }
 
 class Issue {
-  constructor(distribution, clauses, passed) {
+  constructor(name,distribution, clauses, passed) {
     this.distribution = distribution;
     this.clauses = clauses;
     this.passed = passed;
+    this.name=name
+  }
+  addClause(clause){
+    this.clauses.push(clause)
+  }
+
+}
+class commitie {
+  constructor(name,members,head,issue,body){
+    this.name=name
+    this.members=members
+    this.head=head
+    this.issue=issue
+    this.body=body
+  }
+  asignMembers(members){
+    this.members.push(members)
+  }
+  asignLeader(leader){
+    this.leader=leader
   }
 }
 

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Head from 'next/head'; // This line imports the Head component from 'next/head'
 
-const { Clause, Politician, Issue, Bill, hor, senate: senateList } = require('./classesAndObjects.js');
+const { Clause, Politician, Issue, Bill, hor, senate: senateList,commitie} = require('./classesAndObjects.js');
 
 export default function Home() {
   var politicans = [];
@@ -100,9 +100,15 @@ export default function Home() {
     }
     console.log('Senate Majoirty Leader:',majorityLeader)
     //<calcuates majority leader/>
+  
 
   }
-
+  //TODO: Create issues & clauses
+  
+  function asignCommities(leader,body,commities){
+    //TODO: Deal with commities
+    return console.error('you need to fill in this function, come here and look at the TODOs')
+  }
   function createPolitician(name, isSenate) {
     if (isSenate) {
       var politician = new Politician(getRandomArbitrary(-1, 1), 'Senate', '', name);
@@ -113,7 +119,7 @@ export default function Home() {
     } else {
 
       //raise it to the 2th power to create distribution so most Politicians are moderate but some are radical, maybe chage later
-      var politician = new Politician(Math.pow(getRandomArbitrary(-1, 1),2), 'House', '', name);
+      var politician = new Politician(-1*Math.pow(getRandomArbitrary(-1, 1),2), 'House', '', name);
       hor.push(politician);
     }
     politicans.push(politician);
