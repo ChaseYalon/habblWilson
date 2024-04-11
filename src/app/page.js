@@ -48,6 +48,58 @@ export default function Home() {
     for (let j = 0; j < 435; j++) {
       createPolitician(processData(data, false), false); // For House of Representatives
     }
+    //<calculates speaker>
+    var horConservatives=[]
+    var horLiberals=[]
+    var senateConservatives=[]
+    var senateLiberals=[]
+    var k=0
+    while(k<435){
+      if(hor[k].leaning>0){
+        horLiberals.push(hor[k])
+      }else {
+        horConservatives.push(hor[k])
+      }
+      k++
+      
+    }
+    for(let l=0;l<100;l++){
+      if(senate[l].leaning>0){
+        senateLiberals.push(senate[l])
+      }else {
+        senateConservatives.push(senate[l])
+      }
+    }
+    var horMajority=''
+    var senateMajority=''
+    if(horLiberals.length>horConservatives.length){
+      horMajority='Liberals'
+    }else {
+      horMajority='Conservatives'
+    }
+    let speaker;
+    if(horMajority==='Liberals'){
+      speaker=horLiberals[getRandomInt(1,horLiberals.length)]
+    }else {
+      speaker=horConservatives[getRandomInt(1,horConservatives.length)]
+    }
+    console.log('Speaker of the house:',speaker)
+    //<calculates speaker/>
+    //TODO: Make it so appointments are not random and instead there is some sort of internal compromise/election or person closest to +-0.5 (depending on party)
+    //<calculates majority leader (head of the senate but not technicaly, google president pro tempore and senate majority leader)>
+    let majorityLeader;
+    if(senateLiberals.length>senateConservatives.length){
+      senateMajority='Liberals'
+    }else {
+      senateMajority='Conservatives'
+    }
+    if(senateMajority==='Liberals'){
+      majorityLeader=senateLiberals[getRandomInt(1,senateLiberals.length)]
+    }else {
+      majorityLeader=senateConservatives[getRandomInt(1,senateConservatives.length)]
+    }
+    console.log('Senate Majoirty Leader:',majorityLeader)
+    //<calcuates majority leader/>
 
   }
 
@@ -59,7 +111,9 @@ export default function Home() {
       senate.push(politician);
       console.log('senate length after',senate.length)
     } else {
-      var politician = new Politician(getRandomArbitrary(-1, 1), 'House', '', name);
+
+      //raise it to the 2th power to create distribution so most Politicians are moderate but some are radical, maybe chage later
+      var politician = new Politician(Math.pow(getRandomArbitrary(-1, 1),2), 'House', '', name);
       hor.push(politician);
     }
     politicans.push(politician);
@@ -80,14 +134,9 @@ export default function Home() {
   var president=appointPresident('Joe Biden',0.3)
   return (
     <>
-<Head>
-  <title>My Next.js Site</title>
-  <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
-</Head>
 
       <main>
-        <p>It works</p>
-        {/* ... other content ... */}
+        <p>it works</p>
       </main>
     </>
   );
