@@ -1,9 +1,10 @@
 class Clause {
-  constructor(Name,leaning, text, conflictsWith = []) {
+  constructor(Name,leaning, text, conflictsWith = [],cost) {
     this.leaning = leaning;
     this.text = text;
     this.conflictsWith = conflictsWith;
     this.Name=name
+    this.cost=cost
   }
 
   checkConflicts(issue) {
