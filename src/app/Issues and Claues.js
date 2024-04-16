@@ -20,8 +20,7 @@ function createDistFromFunction(func) {
     return scaledValues;
 }
 
-// Example usage with y = x^2
-console.log();
+
 
 
 //FYI: I pulled all these numbers out of my ass, maybe go find real data?
@@ -39,6 +38,10 @@ var abbortion=new Issue('Abortion',createDistFromFunction(x => x ** 2),[totalBan
     var twentySixWeekBan=new Clause('26 week ban',-0.35,'It is hereby adopted that unless specifcaly exempted all abbortions are banned after 26 weeks',[totalBan,sixWeekBan,twelveWeekBan,sixteenWeekBan,eighteenWeekBan,twenteyWeekBan,untillFetalVibilaty],0)
     var untillFetalVibilaty=new Clause('Untill fetal viability',0.1,'It is hereby adopted that unless specifcaly exempted all abbortions are banned after fetal viability',[totalBan,sixWeekBan,twelveWeekBan,sixteenWeekBan,eighteenWeekBan,twenteyWeekBan,twentySixWeekBan],0)
 
-var immagration=new Issue('Immagration reform',createDistFromFunction(x =>x ** 2),[],false)
+var immagration=new Issue('Immagration reform',createDistFromFunction(x =>x ** 2),[console.error('need to add clauses to immagration issue')],false)
     var buildAWall=new Clause('Build a wall across the border',-0.8,'It is resolved that for the specefied cost we will build a wall across the southern border with Mexico ',[],18000000000)
-    var improveAsylum=new Clause('Asylum reform',0.3,)
+    var improveAsylum=new Clause('Asylum reform',0.3,'Reform and revatalize the asylumn system /*placholder, fix this it sucks,line 43 issues and clauses*/',[],30000000)
+    var title42=new Clause('Tittle 42 of the U.S. health code',-0.1,'Under tittle 42 of the U.S. health code no migrant may apply for Asylumn on U.S. soil, you must wait in Mexico untill you are approved',[],0)
+    /*add more */
+
+var lgbtqPLUSRights=new Issue('LGBTQ+ Rights',[0, 0, 0, 0, 0, 1, 1, 3, 4, 6, 6, 6, 6, 7, 9, 9, 9, 11, 13, 9])
