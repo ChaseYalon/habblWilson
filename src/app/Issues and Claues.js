@@ -1,3 +1,4 @@
+const { CLIENT_STATIC_FILES_RUNTIME_MAIN_APP } = require('next/dist/shared/lib/constants.js');
 const { Clause, Politician, Issue, Bill, hor, senate: senateList,commitie} = require('./classesAndObjects.js');
 function createDistFromFunction(func) {
     const numIndices = 20;
@@ -52,5 +53,6 @@ var LGBTQPLUSRights=new Issue('LGBTQ+ rights',createDistFromFunction(x=>2*(1/(1+
     var ReligousRights= new Clause('Religous Service Rights',-0.2,'Resolved, a person may deny service to annother at a private establisment based on their religous beliefs, as long as it is a truly held belif',[serviceRights],0)
     var noAddoptionRights= new Clause('No Addoption rights',-0.8,'Resolved, no person who identifes as "LGBTQ+ shall hold custody of any child.',[addoptionRights],0)
 
-var gunRights=new Issue('Gun Rights',createDistFromFunction(x=>2*(1/(1+Math.pow(Math.E,-6*x)))),[],false)
-    
+var gunRights=new Issue('Gun Rights',createDistFromFunction(x=>x ** 3),[],false)
+    var noRestrictons=new Clause ('No Restrictions',-0.8,'Resolved, in the Untied States of America under the Second Ammendment, all restrictions on any firearms are lifted',[],0)
+    var openCarry=new Clause('Open Carry',-0.6,'Resolved, any Ammerican')
