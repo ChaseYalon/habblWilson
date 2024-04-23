@@ -20,7 +20,8 @@ function createDistFromFunction(func) {
     return scaledValues;
 }
 
-
+// Example usage with y = x^2
+console.log();
 
 
 //FYI: I pulled all these numbers out of my ass, maybe go find real data?
@@ -38,10 +39,13 @@ var abbortion=new Issue('Abortion',createDistFromFunction(x => x ** 2),[totalBan
     var twentySixWeekBan=new Clause('26 week ban',-0.35,'It is hereby adopted that unless specifcaly exempted all abbortions are banned after 26 weeks',[totalBan,sixWeekBan,twelveWeekBan,sixteenWeekBan,eighteenWeekBan,twenteyWeekBan,untillFetalVibilaty],0)
     var untillFetalVibilaty=new Clause('Untill fetal viability',0.1,'It is hereby adopted that unless specifcaly exempted all abbortions are banned after fetal viability',[totalBan,sixWeekBan,twelveWeekBan,sixteenWeekBan,eighteenWeekBan,twenteyWeekBan,twentySixWeekBan],0)
 
-var immagration=new Issue('Immagration reform',createDistFromFunction(x =>x ** 2),[console.error('need to add clauses to immagration issue')],false)
+var immagration=new Issue('Immagration reform',createDistFromFunction(x =>Math.abs(x ** 3) ),[],false)
     var buildAWall=new Clause('Build a wall across the border',-0.8,'It is resolved that for the specefied cost we will build a wall across the southern border with Mexico ',[],18000000000)
-    var improveAsylum=new Clause('Asylum reform',0.3,'Reform and revatalize the asylumn system /*placholder, fix this it sucks,line 43 issues and clauses*/',[],30000000)
-    var title42=new Clause('Tittle 42 of the U.S. health code',-0.1,'Under tittle 42 of the U.S. health code no migrant may apply for Asylumn on U.S. soil, you must wait in Mexico untill you are approved',[],0)
-    /*add more */
+    var improveAsylum=new Clause('Asylum reform',0.3,'Improve the asylum system by streamlining it and opening it up for more people. Elidgable people now include, anyone with a credible fear of violencene. ',[],30000000)
+    var title42=new Clause('Title 42 of the U.S. health code',-0.2,'Under the Center for Disease Controls athrotiry to prevent infections disease from entering this country, all migrants even those seking asylum must wait in Mexico untill they have been approved for entery.',[],2000000000)
+    /*add more, lots more */
+//the part with the createDistFromFunction() is very definetley broken, x should be -1+0.1x where x is an integer between 1-20 and y should be a number betwetwen -1 and 1 inclusive that gets turred into an array of distributions that sums to 100 for each index x 
+var LGBTQPLUSRights=new Issue('LGBTQ+ rights',createDistFromFunction(x=>2*(1/(1+Math.pow(Math.E,-6*x)))),[/*add clauses here*/],false)
+    //add clauses here
 
-var lgbtqPLUSRights=new Issue('LGBTQ+ Rights',[0, 0, 0, 0, 0, 1, 1, 3, 4, 6, 6, 6, 6, 7, 9, 9, 9, 11, 13, 9])
+var gunRights=new Issue('Gun Rights',createDistFromFunction)
