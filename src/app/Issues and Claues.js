@@ -39,13 +39,18 @@ var abbortion=new Issue('Abortion',createDistFromFunction(x => x ** 2),[totalBan
     var twentySixWeekBan=new Clause('26 week ban',-0.35,'It is hereby adopted that unless specifcaly exempted all abbortions are banned after 26 weeks',[totalBan,sixWeekBan,twelveWeekBan,sixteenWeekBan,eighteenWeekBan,twenteyWeekBan,untillFetalVibilaty],0)
     var untillFetalVibilaty=new Clause('Untill fetal viability',0.1,'It is hereby adopted that unless specifcaly exempted all abbortions are banned after fetal viability',[totalBan,sixWeekBan,twelveWeekBan,sixteenWeekBan,eighteenWeekBan,twenteyWeekBan,twentySixWeekBan],0)
 
-var immagration=new Issue('Immagration reform',createDistFromFunction(x =>Math.abs(x ** 3) ),[],false)
+var immagration=new Issue('Immagration reform',createDistFromFunction(x =>Math.abs(x ** 3) ),[buildAWall,improveAsylum,title42],false)
     var buildAWall=new Clause('Build a wall across the border',-0.8,'It is resolved that for the specefied cost we will build a wall across the southern border with Mexico ',[],18000000000)
     var improveAsylum=new Clause('Asylum reform',0.3,'Improve the asylum system by streamlining it and opening it up for more people. Elidgable people now include, anyone with a credible fear of violencene. ',[],30000000)
     var title42=new Clause('Title 42 of the U.S. health code',-0.2,'Under the Center for Disease Controls athrotiry to prevent infections disease from entering this country, all migrants even those seking asylum must wait in Mexico untill they have been approved for entery.',[],2000000000)
     /*add more, lots more */
-//the part with the createDistFromFunction() is very definetley broken, x should be -1+0.1x where x is an integer between 1-20 and y should be a number betwetwen -1 and 1 inclusive that gets turred into an array of distributions that sums to 100 for each index x 
-var LGBTQPLUSRights=new Issue('LGBTQ+ rights',createDistFromFunction(x=>2*(1/(1+Math.pow(Math.E,-6*x)))),[/*add clauses here*/],false)
-    //add clauses here
+var LGBTQPLUSRights=new Issue('LGBTQ+ rights',createDistFromFunction(x=>2*(1/(1+Math.pow(Math.E,-6*x)))),[marriageRights,addoptionRights,serviceRights,noAddoptionRights,noMarriageRights,ReligousRights],false)
+    var marriageRights= new Clause('Marridge Rights',0.2,'Resolved,no person in the United States shall be dennied marridge based on their sexual orentation, futhermore marridge is defined as a untion between two people',[noMarriageRights],0)
+    var addoptionRights= new Clause('Addoption Rights',0.1,'Resolved, no person shall be dennied addoption because of their sexxual oreentation',[noAddoptionRights],0)
+    var serviceRights= new Clause('Service Rights',0.3,'Resolved, no person shall be dennied service at an public or private establisment based on their sexxual orrentation',[ReligousRights],0)
+    var noMarriageRights= new Clause('No Marriage Rights',-0.4,'Resolved, the term "Marriage" is defined as between a man and a woman and "Spouse" is defined as the opposite sex of a husband or wife respectivley',[marriageRights],0)
+    var ReligousRights= new Clause('Religous Service Rights',-0.2,'Resolved, a person may deny service to annother at a private establisment based on their religous beliefs, as long as it is a truly held belif',[serviceRights],0)
+    var noAddoptionRights= new Clause('No Addoption rights',-0.8,'Resolved, no person who identifes as "LGBTQ+ shall hold custody of any child.',[addoptionRights],0)
 
-var gunRights=new Issue('Gun Rights',createDistFromFunction)
+var gunRights=new Issue('Gun Rights',createDistFromFunction(x=>2*(1/(1+Math.pow(Math.E,-6*x)))),[],false)
+    
