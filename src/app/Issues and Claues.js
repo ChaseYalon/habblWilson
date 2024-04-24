@@ -66,4 +66,6 @@ var gunRights=new Issue('Gun Rights',createDistFromFunction(x=>x ** 3),[noRestri
     var mandatoryCertification = new Clause('Mandatory Certification',0.3,'Resolved after the purchase and before the recipt of a firearm and every five years after recipt, one must attend a mandatory federal saftey course',[],10000000)
 
     /*add more, lots more */
-
+module. Exports={
+    abbortion,immagration,LGBTQPLUSRights,gunRights
+ }

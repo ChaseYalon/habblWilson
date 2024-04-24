@@ -2,7 +2,7 @@ import Image from "next/image";
 import Head from 'next/head'; // This line imports the Head component from 'next/head'
 
 const { Clause, Politician, Issue, Bill, hor, senate: senateList,commitie} = require('./classesAndObjects.js');
-
+const {abbortion,immagration,LGBTQPLUSRights,gunRights}=require('./Issues and Claues.js')
 export default function Home() {
   var politicans = [];
   var hor = [];
