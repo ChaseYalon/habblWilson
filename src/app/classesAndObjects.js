@@ -1,10 +1,10 @@
 class Clause {
-  constructor(Name,leaning, text, conflictsWith = [],cost) {
+  constructor(Name, leaning, text, conflictsWith = [], cost) {
     this.leaning = leaning;
     this.text = text;
     this.conflictsWith = conflictsWith;
-    this.Name=name
-    this.cost=cost
+    this.Name = Name; // Fixed case to match the parameter Name
+    this.cost = cost;
   }
 
   checkConflicts(issue) {
@@ -17,41 +17,44 @@ class Clause {
     return this.conflictsWith;
   }
 }
-//-1 =MTG (Ultra conservative) 1=Bernnie Sanders (ultra liberal) 0 = Joe Manchien (moderate)
+
 class Politician {
-  constructor(leaning, body, committee,name) {
+  constructor(leaning, body, committee, name) {
     this.leaning = leaning;
     this.body = body;
     this.committee = committee;
-    this.name=name
+    this.name = name;
   }
 }
 
 class Issue {
-  constructor(name,distribution, clauses, passed) {
+  constructor(name, distribution, clauses, passed) {
     this.distribution = distribution;
     this.clauses = clauses;
     this.passed = passed;
-    this.name=name
-  }
-  addClause(clause){
-    this.clauses.push(clause)
+    this.name = name;
   }
 
+  addClause(clause) {
+    this.clauses.push(clause);
+  }
 }
-class commitie {
-  constructor(name,members,head,issue,body){
-    this.name=name
-    this.members=members
-    this.head=head
-    this.issue=issue
-    this.body=body
+
+class Committee {
+  constructor(name, members, head, issue, body) {
+    this.name = name;
+    this.members = members;
+    this.head = head;
+    this.issue = issue;
+    this.body = body;
   }
-  asignMembers(members){
-    this.members.push(members)
+
+  assignMembers(members) {
+    this.members.push(members);
   }
-  asignLeader(leader){
-    this.leader=leader
+
+  assignLeader(leader) {
+    this.leader = leader;
   }
 }
 
@@ -120,7 +123,7 @@ var senate = {
     for (var i = 0; i < this.senators.length; i++) {
       leaning += this.senators[i].leaning;
     }
-    return leaning/this.senators.length;
+    return leaning / this.senators.length;
   },
   get leaning() {
     return this.calculateLeaning();
@@ -128,4 +131,4 @@ var senate = {
 };
 
 // Export all the classes and the object
-module.exports = { Clause, Politician, Issue, Bill, hor, senate };
+module.exports = { Clause, Politician, Issue, Bill, Committee, hor, senate };
