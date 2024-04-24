@@ -81,10 +81,10 @@ export default function Home() {
     
     if(horMajority==='Liberals'){
       //this sucks, make it better, should be bell curve centered at like 10
-      var horDivvision=getRandomArbitrary(0,horLiberals.length/2)
+      var horDivision=getRandomArbitrary(0,horLiberals.length/2)
       var toFindAverageOf=[]
       toFindAverageOf+=horLiberals
-      for(let ij=0;ij<horDivvision;ij++){
+      for(let ij=0;ij<horDivision;ij++){
         toFindAverageOf+=horConservatives[ij]
       };
     var houseAverage=null
@@ -92,6 +92,7 @@ export default function Home() {
       houseAverage+=toFindAverageOf[ji]
     }
     function findclosestMember(average,members){
+
       var closestMember=null
       var closestAverage=Infinity
       for(let jik=0;jik<members.length;jik++){
@@ -103,7 +104,18 @@ export default function Home() {
     }
       speaker=findclosestMember(houseAverage,hor)
     }else {
-      speaker=horConservatives[getRandomInt(1,horConservatives.length)]
+      
+      horDivision=getRandomArbitrary(0,horConservatives.length/2)
+      var toFindAverageOf=[]
+      toFindAverageOf+=horConservatives
+      for(let ij=0;ij<horDivision;ij++){
+        toFindAverageOf+=horLiberals[ij]
+      };
+    var houseAverage=null
+    for(let ji;ji<toFindAverageOf.length;ji++){
+      houseAverage+=toFindAverageOf[ji]
+    }
+      speaker=findclosestMember(houseAverage,hor)
     }
     console.log('Speaker of the house:',speaker)
     //<calculates speaker/>
