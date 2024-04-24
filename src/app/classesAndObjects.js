@@ -120,7 +120,7 @@ var senate = {
     for (var i = 0; i < this.senators.length; i++) {
       leaning += this.senators[i].leaning;
     }
-    return leaning;
+    return leaning/this.senators.length;
   },
   get leaning() {
     return this.calculateLeaning();

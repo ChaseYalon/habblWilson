@@ -52,7 +52,18 @@ var LGBTQPLUSRights=new Issue('LGBTQ+ rights',createDistFromFunction(x=>2*(1/(1+
     var noMarriageRights= new Clause('No Marriage Rights',-0.4,'Resolved, the term "Marriage" is defined as between a man and a woman and "Spouse" is defined as the opposite sex of a husband or wife respectivley',[marriageRights],0)
     var ReligousRights= new Clause('Religous Service Rights',-0.2,'Resolved, a person may deny service to annother at a private establisment based on their religous beliefs, as long as it is a truly held belif',[serviceRights],0)
     var noAddoptionRights= new Clause('No Addoption rights',-0.8,'Resolved, no person who identifes as "LGBTQ+ shall hold custody of any child.',[addoptionRights],0)
+    /*add more, lots more */
 
-var gunRights=new Issue('Gun Rights',createDistFromFunction(x=>x ** 3),[],false)
+var gunRights=new Issue('Gun Rights',createDistFromFunction(x=>x ** 3),[noRestrictons,openCarry,conceledCarry,noHighVolumeMags,assultWeponBan,mandatoryBackroundChecks,tenDayWaitingPeriods,ammoSepreate,mandatoryCertification],false)
     var noRestrictons=new Clause ('No Restrictions',-0.8,'Resolved, in the Untied States of America under the Second Ammendment, all restrictions on any firearms are lifted',[],0)
-    var openCarry=new Clause('Open Carry',-0.6,'Resolved, any Ammerican')
+    var openCarry=new Clause('Open Carry',-0.6,'Resolved, any Ammerican may with or without a permit carry arround a firearm not conceled at all or partialy conceled',[conceledCarry],0)
+    var conceledCarry=new Clause('Conceled Carry',-0.2,'Resolved,any American may carry a legal (as defeind elsewhere) conceled fully however may not carry conceled partialy or not at all conceled firearms',[openCarry],10000000)
+    var noHighVolumeMags=new Clause('No High Volume Mags',0.2,'Resolved, no gun shall have a magazine capable of holding more then 3 rounds before reloading',[],0)
+    var assultWeponBan = new Clause('Assult Wepon ban',0.1,'Resolved, any and all assult wepons are hereby banned.',[],0)
+    var mandatoryBackroundChecks = new Clause('Mandatory background checks',0,'Resolved, before you can own a gun you must pass a criminal and mental background check.',[],0)
+    var tenDayWaitingPeriods = new Clause('Ten Day Waiting Periods',0.2,'Resolved, there must be a delay of 10 days between your purchase of a firearm and your recipt of same.',[],0)
+    var ammoSepreate = new Clause('Ammo Sperate',0.4,'Resolved, you must seek sperate approval and registration for an ammo from your firearm(s)',[],0)
+    var mandatoryCertification = new Clause('Mandatory Certification',0.3,'Resolved after the purchase and before the recipt of a firearm and every five years after recipt, one must attend a mandatory federal saftey course',[],10000000)
+
+    /*add more, lots more */
+

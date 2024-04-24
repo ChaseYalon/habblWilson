@@ -118,8 +118,8 @@ export default function Home() {
       console.log('senate length after',senate.length)
     } else {
 
-      //raise it to the 2th power to create distribution so most Politicians are moderate but some are radical, maybe chage later
-      var politician = new Politician(-1*Math.pow(getRandomArbitrary(-1, 1),2), 'House', '', name);
+      //raise it to the 3rd power to create distribution so most Politicians are moderate but some are radical, maybe chage later
+      var politician = new Politician(-1*Math.pow(getRandomArbitrary(-1, 1),3), 'House', '', name);
       hor.push(politician);
     }
     politicans.push(politician);
