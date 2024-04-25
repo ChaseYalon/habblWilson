@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Head from 'next/head'; // This line imports the Head component from 'next/head'
 
-const { Clause, Politician, Issue, Bill, hor, senate: senateList,commitie} = require('./classesAndObjects.js');
-const {abbortion,immagration,LGBTQPLUSRights,gunRights}=require('./Issues and Claues.js')
+const { Clause, Politician, Issue, Bill, hor, senate: senateList, Committee } = require('./classesAndObjects.js');
+const { abortion, immigration, LGBTQPLUSRights, gunRights } = require('./IssuesAndClauses');
+
 export default function Home() {
-  var politicans = [];
+  var politicians = [];
   var hor = [];
   var senate = [];
 
@@ -13,9 +14,10 @@ export default function Home() {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+
   function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
-}
+  }
 
   async function loadNames() {
     const data = await import('/public/names.json');
@@ -38,147 +40,77 @@ export default function Home() {
     return name.concat(' ', lastName);
   }
 
+  function selectLeader(members, isMajorityLiberal) {
+    // Separate members into liberals and conservatives
+    var liberals = members.filter(member => member.leaning > 0);
+    var conservatives = members.filter(member => member.leaning <= 0);
+
+    // Decide the majority and minority based on the flag
+    var majorityGroup = isMajorityLiberal ? liberals : conservatives;
+    var minorityGroup = isMajorityLiberal ? conservatives : liberals;
+
+    // Determine the number of minority members to include
+    var minorityIncludeCount = Math.floor(getRandomArbitrary(0, minorityGroup.length / 2));
+    var combinedGroup = majorityGroup.slice(); // Start with a copy of the majority
+
+    // Randomly add a subset of the minority group
+    while (minorityIncludeCount-- > 0) {
+      var randomIndex = getRandomInt(0, minorityGroup.length - 1);
+      combinedGroup.push(minorityGroup[randomIndex]);
+    }
+
+    // Calculate the average leaning of the combined group
+    var averageLeaning = combinedGroup.reduce((total, member) => total + member.leaning, 0) / combinedGroup.length;
+
+    // Select the leader as the member closest to the average leaning
+    var selectedLeader = combinedGroup.reduce((closest, member) => {
+      var closestDifference = Math.abs(closest.leaning - averageLeaning);
+      var currentDifference = Math.abs(member.leaning - averageLeaning);
+      return currentDifference < closestDifference ? member : closest;
+    }, combinedGroup[0]);
+
+    return selectedLeader;
+  }
+
   async function createCongress() {
     const data = await loadNames();
     for (let i = 0; i < 100; i++) {
       createPolitician(processData(data, true), true); // For Senate
-      console.log('senate added')
-      console.log(senate)
     }
     for (let j = 0; j < 435; j++) {
       createPolitician(processData(data, false), false); // For House of Representatives
     }
-    //<calculates speaker>
-    var horConservatives=[]
-    var horLiberals=[]
-    var senateConservatives=[]
-    var senateLiberals=[]
-    var k=0
-    while(k<435){
-      if(hor[k].leaning>0){
-        horLiberals.push(hor[k])
-      }else {
-        horConservatives.push(hor[k])
-      }
-      k++
-      
-    }
-    for(let l=0;l<100;l++){
-      if(senate[l].leaning>0){
-        senateLiberals.push(senate[l])
-      }else {
-        senateConservatives.push(senate[l])
-      }
-    }
-    var horMajority=''
-    var senateMajority=''
-    if(horLiberals.length>horConservatives.length){
-      horMajority='Liberals'
-    }else {
-      horMajority='Conservatives'
-    }
-    let speaker;
-    
-    if(horMajority==='Liberals'){
-      //this sucks, make it better, should be bell curve centered at like 10
-      var horDivision=getRandomArbitrary(0,horLiberals.length/2)
-      var toFindAverageOf=[]
-      toFindAverageOf+=horLiberals
-      for(let ij=0;ij<horDivision;ij++){
-        toFindAverageOf+=horConservatives[ij]
-      };
-    var houseAverage=null
-    for(let ji;ji<toFindAverageOf.length;ji++){
-      houseAverage+=toFindAverageOf[ji]
-    }
-    function findclosestMember(average,members){
 
-      var closestMember=null
-      var closestAverage=Infinity
-      for(let jik=0;jik<members.length;jik++){
-        if(members[jik].leaning-average<closestAverage){
-          closestAverage=members[jik].leaning
-          closestMember=members[jik]
-        }
-      }
-    }
-      speaker=findclosestMember(houseAverage,hor)
-    }else {
-      
-      horDivision=getRandomArbitrary(0,horConservatives.length/2)
-      var toFindAverageOf=[]
-      toFindAverageOf+=horConservatives
-      for(let ij=0;ij<horDivision;ij++){
-        toFindAverageOf+=horLiberals[ij]
-      };
-    var houseAverage=null
-    for(let ji;ji<toFindAverageOf.length;ji++){
-      houseAverage+=toFindAverageOf[ji]
-    }
-      speaker=findclosestMember(houseAverage,hor)
-    }
-    console.log('Speaker of the house:',speaker)
-    //<calculates speaker/>
-    //TODO: Make it so appointments are not random and instead there is some sort of internal compromise/election or person closest to +-0.5 (depending on party)
-    //<calculates majority leader (head of the senate but not technicaly, google president pro tempore and senate majority leader)>
-    let majorityLeader;
-    if(senateLiberals.length>senateConservatives.length){
-      senateMajority='Liberals'
-    }else {
-      senateMajority='Conservatives'
-    }
-    if(senateMajority==='Liberals'){
-      majorityLeader=senateLiberals[getRandomInt(1,senateLiberals.length)]
-    }else {
-      majorityLeader=senateConservatives[getRandomInt(1,senateConservatives.length)]
-    }
-    console.log('Senate Majoirty Leader:',majorityLeader)
-    //<calcuates majority leader/>
-  
+    var speaker = selectLeader(hor, hor.filter(rep => rep.leaning > 0).length > hor.filter(rep => rep.leaning < 0).length);
+    var majorityLeader = selectLeader(senate, senate.filter(sen => sen.leaning > 0).length > senate.filter(sen => sen.leaning < 0).length);
 
+    console.log('Speaker of the House:', speaker.name);
+    console.log('Senate Majority Leader:', majorityLeader.name);
   }
-  //TODO: Create issues & clauses
-  
-  function asignCommities(leader,body,commities){
-    //TODO: Deal with commities
-    return console.error('you need to fill in this function, come here and look at the TODOs')
-  }
+
   function createPolitician(name, isSenate) {
+    var leaning = isSenate ? getRandomArbitrary(-1, 1) : -1 * Math.pow(getRandomArbitrary(-1, 1), 3);
+    var politician = new Politician(leaning, isSenate ? 'Senate' : 'House', '', name);
+    politicians.push(politician);
     if (isSenate) {
-      var politician = new Politician(getRandomArbitrary(-1, 1), 'Senate', '', name);
-      console.log('poliation got made')
-      console.log('sentate length',senate.length)
       senate.push(politician);
-      console.log('senate length after',senate.length)
     } else {
-
-      //raise it to the 3rd power to create distribution so most Politicians are moderate but some are radical, maybe chage later
-      var politician = new Politician(-1*Math.pow(getRandomArbitrary(-1, 1),3), 'House', '', name);
       hor.push(politician);
     }
-    politicans.push(politician);
   }
-  function appointPresident(name,leaning){
-    //auto sets male for president for obvious reasons, maybe fix later?
-    if(Math.abs(leaning)>1){
-      var leaning=getRandomArbitrary(-1,1)
-    }else {
-      var leaning=leaning
-    }
-    var president=new Politician(leaning,'President','',name)
-    politicans.push(president)
-    return president
-  }
-  createCongress(); // Initialize the creation process
-  //Appoints Biden president, he is Liberal but not radical maybe move to 0.4/0.5?
-  var president=appointPresident('Joe Biden',0.3)
-  return (
-    <>
 
-      <main>
-        <p>it works</p>
-      </main>
-    </>
+  function appointPresident(name, leaning) {
+    var president = new Politician(leaning, 'President', '', name);
+    politicians.push(president);
+    return president;
+  }
+
+  createCongress(); // Initialize the creation process
+  var president = appointPresident('Joe Biden', 0.3);
+
+  return (
+    <main>
+      <p>it works</p>
+    </main>
   );
 }
-
