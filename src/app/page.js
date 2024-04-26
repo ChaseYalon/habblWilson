@@ -1,8 +1,9 @@
 import Image from "next/image";
-import Head from 'next/head'; // This line imports the Head component from 'next/head'
+import Head from 'next/head'; // This imports the Head component from 'next/head'
 
+// Correct the import paths according to your file structure
 const { Clause, Politician, Issue, Bill, hor, senate: senateList, Committee } = require('./classesAndObjects.js');
-const { abortion, immigration, LGBTQPLUSRights, gunRights } = require('./IssuesAndClauses');
+const { abortion, immigration, LGBTQPLUSRights, gunRights } = require('./IssuesAndClauses.js'); // Fixed the filename here
 
 export default function Home() {
   var politicians = [];
@@ -27,42 +28,22 @@ export default function Home() {
   function processData(data, male) {
     var lastLength = data.last.length;
     var lastName = data.last[getRandomInt(0, lastLength)];
-    var name = '';
-    if (male) {
-      var boysLength = data.boys.length;
-      var firstName = data.boys[getRandomInt(0, boysLength)];
-      name += firstName;
-    } else {
-      var girlsLength = data.girls.length;
-      var firstName = data.girls[getRandomInt(0, girlsLength)];
-      name += firstName;
-    }
-    return name.concat(' ', lastName);
+    var firstName = male ? data.boys[getRandomInt(0, data.boys.length)] : data.girls[getRandomInt(0, data.girls.length)];
+    return `${firstName} ${lastName}`;
   }
 
   function selectLeader(members, isMajorityLiberal) {
-    // Separate members into liberals and conservatives
-    var liberals = members.filter(member => member.leaning > 0);
-    var conservatives = members.filter(member => member.leaning <= 0);
+    var majorityGroup = members.filter(member => isMajorityLiberal ? member.leaning > 0 : member.leaning < 0);
+    var minorityGroup = members.filter(member => isMajorityLiberal ? member.leaning < 0 : member.leaning > 0);
 
-    // Decide the majority and minority based on the flag
-    var majorityGroup = isMajorityLiberal ? liberals : conservatives;
-    var minorityGroup = isMajorityLiberal ? conservatives : liberals;
-
-    // Determine the number of minority members to include
     var minorityIncludeCount = Math.floor(getRandomArbitrary(0, minorityGroup.length / 2));
-    var combinedGroup = majorityGroup.slice(); // Start with a copy of the majority
+    var combinedGroup = majorityGroup.slice(); // Clone the majority group
 
-    // Randomly add a subset of the minority group
     while (minorityIncludeCount-- > 0) {
-      var randomIndex = getRandomInt(0, minorityGroup.length - 1);
-      combinedGroup.push(minorityGroup[randomIndex]);
+      combinedGroup.push(minorityGroup[getRandomInt(0, minorityGroup.length - 1)]);
     }
 
-    // Calculate the average leaning of the combined group
     var averageLeaning = combinedGroup.reduce((total, member) => total + member.leaning, 0) / combinedGroup.length;
-
-    // Select the leader as the member closest to the average leaning
     var selectedLeader = combinedGroup.reduce((closest, member) => {
       var closestDifference = Math.abs(closest.leaning - averageLeaning);
       var currentDifference = Math.abs(member.leaning - averageLeaning);
@@ -84,12 +65,20 @@ export default function Home() {
     var speaker = selectLeader(hor, hor.filter(rep => rep.leaning > 0).length > hor.filter(rep => rep.leaning < 0).length);
     var majorityLeader = selectLeader(senate, senate.filter(sen => sen.leaning > 0).length > senate.filter(sen => sen.leaning < 0).length);
 
-    console.log('Speaker of the House:', speaker.name);
-    console.log('Senate Majority Leader:', majorityLeader.name);
+    console.log('Speaker of the House:', speaker.name,',',speaker.leaning);
+    console.log('Senate Majority Leader:', majorityLeader.name,',',majorityLeader.leanging);
+
+    // Log all politicians
+    console.log("All Politicians:");
+    var pCounter=0
+    politicians.forEach(politician => {
+      console.log(`${politician.name}: ${politician.leaning.toFixed(2)} (${politician. Body}) (${pCounter})`)
+      pCounter++;
+    });
   }
 
   function createPolitician(name, isSenate) {
-    var leaning = isSenate ? getRandomArbitrary(-1, 1) : -1 * Math.pow(getRandomArbitrary(-1, 1), 3);
+    var leaning = isSenate ? getRandomArbitrary(-1, 1) : -Math.pow(getRandomArbitrary(-1, 1), 3);
     var politician = new Politician(leaning, isSenate ? 'Senate' : 'House', '', name);
     politicians.push(politician);
     if (isSenate) {
@@ -106,11 +95,10 @@ export default function Home() {
   }
 
   createCongress(); // Initialize the creation process
-  var president = appointPresident('Joe Biden', 0.3);
-
+  var president = appointPresident('Joe Biden',0.3)
   return (
     <main>
-      <p>it works</p>
+      <p>this works</p>
     </main>
-  );
+  )
 }
