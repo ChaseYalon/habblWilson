@@ -1,16 +1,39 @@
 import Image from "next/image";
-import Head from 'next/head'; // This imports the Head component from 'next/head'
-const fs=require('node:fs')
-var importStart=performance.now()
-// Correct the import paths according to your file structure
-const { Clause, Politician, Issue, Bill, hor, senate: senateList, Committee } = require('./classesAndObjects.js');
-const { abortion, immigration, LGBTQPLUSRights, gunRights } = require('./IssuesAndClauses.js'); // Fixed the filename here
-var importEnd=performance.now()
+import Head from 'next/head';
+import { useEffect } from 'react';
+const fs = require('fs');
+const { performance } = require('perf_hooks');
+
+const { Clause, Politician, Issue, Bill, Committee } = require('../lib/classesAndObjects.js');
+const { abortion, immigration, LGBTQPLUSRights, gunRights } = require('../lib/IssuesAndClauses.js');
 
 export default function Home() {
   var politicians = [];
   var hor = [];
   var senate = [];
+
+  useEffect(() => {
+    // Performance data capturing
+    const importStart = performance.now();
+    // Simulate delay to emulate imports
+    setTimeout(() => {
+      const importEnd = performance.now();
+
+      // Exporting performance data upon page load
+      const exportPerformanceData = () => {
+        const performanceString = `Import time: ${importEnd - importStart}ms\n`;
+        fs.writeFile('public/performance.txt', performanceString, err => {
+          if (err) {
+            console.error('Error writing to file:', err);
+          } else {
+            console.log('Performance data written successfully to file');
+          }
+        });
+      };
+
+      exportPerformanceData();
+    }, 500);
+  }, []);
 
   function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -21,37 +44,25 @@ export default function Home() {
   function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
   }
-  let loadStart;
-  let loadEnd;
-  let processStart;
-  let processEnd;
-  let selectStart;
-  let selectEnd;
-  let congressStart;
-  let congressEnd;
-  async function loadNames() {
-    loadStart=performance.now()
-    const data = await import('/public/names.json');
-    return data.default;
-    loadEnd=performance.now()
+
+  function loadNames() {
+    const data = require('../data/names.json');
+    return data;
   }
 
   function processData(data, male) {
-    processStart=performance.now()
     var lastLength = data.last.length;
     var lastName = data.last[getRandomInt(0, lastLength)];
-    var firstName = male ? data. Boys[getRandomInt(0, data.boys.length)] : data.girls[getRandomInt(0, data.girls.length)];
+    var firstName = male ? data.boys[getRandomInt(0, data.boys.length)] : data.girls[getRandomInt(0, data.girls.length)];
     return `${firstName} ${lastName}`;
-    processEnd=performance.now()
   }
 
   function selectLeader(members, isMajorityLiberal) {
-    selectStart=performance.now()
     var majorityGroup = members.filter(member => isMajorityLiberal ? member.leaning > 0 : member.leaning < 0);
     var minorityGroup = members.filter(member => isMajorityLiberal ? member.leaning < 0 : member.leaning > 0);
 
     var minorityIncludeCount = Math.floor(getRandomArbitrary(0, minorityGroup.length / 2));
-    var combinedGroup = majorityGroup.slice(); // Clone the majority group
+    var combinedGroup = majorityGroup.slice();
 
     while (minorityIncludeCount-- > 0) {
       combinedGroup.push(minorityGroup[getRandomInt(0, minorityGroup.length - 1)]);
@@ -65,33 +76,6 @@ export default function Home() {
     }, combinedGroup[0]);
 
     return selectedLeader;
-    selectEnd=performance.now()
-  }
-
-  async function createCongress() {
-    congressStart=performance.now()
-    const data = await loadNames();
-    for (let i = 0; i < 100; i++) {
-      createPolitician(processData(data, true), true); // For Senate
-    }
-    for (let j = 0; j < 435; j++) {
-      createPolitician(processData(data, false), false); // For House of Representatives
-    }
-
-    var speaker = selectLeader(hor, hor.filter(rep => rep.leaning > 0).length > hor.filter(rep => rep.leaning < 0).length);
-    var majorityLeader = selectLeader(senate, senate.filter(sen => sen.leaning > 0).length > senate.filter(sen => sen.leaning < 0).length);
-
-    console.log('Speaker of the House:', speaker.name,',',speaker.leaning);
-    console.log('Senate Majority Leader:', majorityLeader.name,',',majorityLeader.leanging);
-
-    // Log all politicians
-    console.log("All Politicians:");
-    var pCounter=0
-    politicians.forEach(politician => {
-      console.log(`${politician.name}: ${politician.leaning.toFixed(2)} (${politician. Body}) (${pCounter})`)
-      pCounter++;
-    });
-    congressEnd=performance.now()
   }
 
   function createPolitician(name, isSenate) {
@@ -105,26 +89,38 @@ export default function Home() {
     }
   }
 
-  function appointPresident(name, leaning) {
-    var president = new Politician(leaning, 'President', '', name);
-    politicians.push(president);
-    return president;
-  }
-  module.performaceCheck.export=function () {
-const performanceString=`Import time:${importEnd-importStart} /nLoad time:${loadEnd-loadStart} /nProcess names time:${processEnd-processStart} /nLeader Selection time:${selectEnd-selectStart} /nCongress creation time:${congressEnd-congressStart}`
+  function createCongress() {
+    const data = loadNames();
+    for (let i = 0; i < 100; i++) {
+      createPolitician(processData(data, true), true); // For Senate
+    }
+    for (let j = 0; j < 435; j++) {
+      createPolitician(processData(data, false), false); // For House of Representatives
+    }
 
-fs.writeFile('tests/performance.txt', performanceString, err => {
-  if (err) {
-    console.error(err);
-  } else {
-    console.log('file written successfully')
+    var speaker = selectLeader(hor, hor.filter(rep => rep.leaning > 0).length > hor.filter(rep => rep.leaning < 0).length);
+    var majorityLeader = selectLeader(senate, senate.filter(sen => sen.leaning > 0).length > senate.filter(sen => sen.leaning < 0).length);
+
+    console.log('Speaker of the House:', speaker.name, ',', speaker.leaning);
+    console.log('Senate Majority Leader:', majorityLeader.name, ',', majorityLeader.leaning);
+
+    // Log all politicians
+    console.log("All Politicians:");
+    var pCounter = 0;
+    politicians.forEach(politician => {
+      console.log(`${politician.name}: ${politician.leaning.toFixed(2)} (${politician.body}) (${pCounter})`);
+      pCounter++;
+    });
   }
-});  }
-  createCongress(); // Initialize the creation process
-  var president = appointPresident('Joe Biden',0.3)
+
   return (
     <main>
-      <p>this works</p>
+      <Head>
+        <title>Home Page</title>
+      </Head>
+      <h1>Welcome to the Next.js Application</h1>
+      <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
+      <p>This page logs performance data on load and writes it to a file.</p>
     </main>
-  )
+  );
 }
