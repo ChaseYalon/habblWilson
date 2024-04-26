@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Head from 'next/head'; // This imports the Head component from 'next/head'
-
+const fs=require('node:fs')
+var importStart=performance.now()
 // Correct the import paths according to your file structure
 const { Clause, Politician, Issue, Bill, hor, senate: senateList, Committee } = require('./classesAndObjects.js');
 const { abortion, immigration, LGBTQPLUSRights, gunRights } = require('./IssuesAndClauses.js'); // Fixed the filename here
+var importEnd=performance.now()
 
 export default function Home() {
   var politicians = [];
@@ -19,20 +21,32 @@ export default function Home() {
   function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
   }
-
+  let loadStart;
+  let loadEnd;
+  let processStart;
+  let processEnd;
+  let selectStart;
+  let selectEnd;
+  let congressStart;
+  let congressEnd;
   async function loadNames() {
+    loadStart=performance.now()
     const data = await import('/public/names.json');
     return data.default;
+    loadEnd=performance.now()
   }
 
   function processData(data, male) {
+    processStart=performance.now()
     var lastLength = data.last.length;
     var lastName = data.last[getRandomInt(0, lastLength)];
-    var firstName = male ? data.boys[getRandomInt(0, data.boys.length)] : data.girls[getRandomInt(0, data.girls.length)];
+    var firstName = male ? data. Boys[getRandomInt(0, data.boys.length)] : data.girls[getRandomInt(0, data.girls.length)];
     return `${firstName} ${lastName}`;
+    processEnd=performance.now()
   }
 
   function selectLeader(members, isMajorityLiberal) {
+    selectStart=performance.now()
     var majorityGroup = members.filter(member => isMajorityLiberal ? member.leaning > 0 : member.leaning < 0);
     var minorityGroup = members.filter(member => isMajorityLiberal ? member.leaning < 0 : member.leaning > 0);
 
@@ -51,9 +65,11 @@ export default function Home() {
     }, combinedGroup[0]);
 
     return selectedLeader;
+    selectEnd=performance.now()
   }
 
   async function createCongress() {
+    congressStart=performance.now()
     const data = await loadNames();
     for (let i = 0; i < 100; i++) {
       createPolitician(processData(data, true), true); // For Senate
@@ -75,6 +91,7 @@ export default function Home() {
       console.log(`${politician.name}: ${politician.leaning.toFixed(2)} (${politician. Body}) (${pCounter})`)
       pCounter++;
     });
+    congressEnd=performance.now()
   }
 
   function createPolitician(name, isSenate) {
@@ -93,7 +110,16 @@ export default function Home() {
     politicians.push(president);
     return president;
   }
+  module.performaceCheck.export=function () {
+const performanceString=`Import time:${importEnd-importStart} /nLoad time:${loadEnd-loadStart} /nProcess names time:${processEnd-processStart} /nLeader Selection time:${selectEnd-selectStart} /nCongress creation time:${congressEnd-congressStart}`
 
+fs.writeFile('tests/performance.txt', performanceString, err => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log('file written successfully')
+  }
+});  }
   createCongress(); // Initialize the creation process
   var president = appointPresident('Joe Biden',0.3)
   return (
