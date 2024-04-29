@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Head from 'next/head';
 import { useEffect } from 'react';
+import { Elsie_Swash_Caps } from "next/font/google/index.js";
 const fs = require('fs');
 const { performance } = require('perf_hooks');
 
@@ -104,13 +105,11 @@ export default function Home() {
     console.log('Speaker of the House:', speaker.name, ',', speaker.leaning);
     console.log('Senate Majority Leader:', majorityLeader.name, ',', majorityLeader.leaning);
 
-    // Log all politicians
-    console.log("All Politicians:");
-    var pCounter = 0;
-    politicians.forEach(politician => {
-      console.log(`${politician.name}: ${politician.leaning.toFixed(2)} (${politician.body}) (${pCounter})`);
-      pCounter++;
-    });
+    if(politicians.length===536){
+      console.log('correct number of politatns')
+    }else{
+      console.log(`number of poliatins:${politicians.lengt}`)
+    }
   }
 
   return (
