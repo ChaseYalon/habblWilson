@@ -1,40 +1,32 @@
 import Image from "next/image";
 import Head from 'next/head';
-import { useEffect } from 'react';
-import { Elsie_Swash_Caps } from "next/font/google/index.js";
 const fs = require('fs');
+// why is this here (TODO: check then delete)
 const { performance } = require('perf_hooks');
 
-const { Clause, Politician, Issue, Bill, Committee } = require('../lib/classesAndObjects.js');
-const { abortion, immigration, LGBTQPLUSRights, gunRights } = require('../lib/IssuesAndClauses.js');
+//I know this is gross code (TODO: make suck less (no weird undefined variables like that))
+let importStart;
+let importEnd;
+let loadStart;
+let loadEnd;
+let processStart;
+let processEnd;
+let selectStart;
+let selectEnd;
+let congressStart;
+let congressEnd;
+
+importStart=performance. now()
+const { Clause, Politician, Issue, Bill, Committee } = require('./classesAndObjects.js');
+const { abortion, immigration, LGBTQPLUSRights, gunRights } = require('./IssuesAndClauses.js');
+importEnd=performance.now()
 
 export default function Home() {
   var politicians = [];
   var hor = [];
   var senate = [];
 
-  useEffect(() => {
-    // Performance data capturing
-    const importStart = performance.now();
-    // Simulate delay to emulate imports
-    setTimeout(() => {
-      const importEnd = performance.now();
 
-      // Exporting performance data upon page load
-      const exportPerformanceData = () => {
-        const performanceString = `Import time: ${importEnd - importStart}ms\n`;
-        fs.writeFile('public/performance.txt', performanceString, err => {
-          if (err) {
-            console.error('Error writing to file:', err);
-          } else {
-            console.log('Performance data written successfully to file');
-          }
-        });
-      };
-
-      exportPerformanceData();
-    }, 500);
-  }, []);
 
   function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -47,18 +39,23 @@ export default function Home() {
   }
 
   function loadNames() {
-    const data = require('../data/names.json');
+    loadStart=performance.now()
+    const data = require('/home/ChaseYalon/habblWilson/public/names.json');
+    loadEnd=performance. now()
     return data;
   }
 
-  function processData(data, male) {
+  function processData(data, male) { 
+    processStart=performance. now()
     var lastLength = data.last.length;
     var lastName = data.last[getRandomInt(0, lastLength)];
     var firstName = male ? data.boys[getRandomInt(0, data.boys.length)] : data.girls[getRandomInt(0, data.girls.length)];
+    processEnd.performance.now()
     return `${firstName} ${lastName}`;
   }
 
   function selectLeader(members, isMajorityLiberal) {
+    selectStart=performance. now()
     var majorityGroup = members.filter(member => isMajorityLiberal ? member.leaning > 0 : member.leaning < 0);
     var minorityGroup = members.filter(member => isMajorityLiberal ? member.leaning < 0 : member.leaning > 0);
 
@@ -75,7 +72,7 @@ export default function Home() {
       var currentDifference = Math.abs(member.leaning - averageLeaning);
       return currentDifference < closestDifference ? member : closest;
     }, combinedGroup[0]);
-
+    selectEnd=performance. now()
     return selectedLeader;
   }
 
@@ -91,6 +88,7 @@ export default function Home() {
   }
 
   function createCongress() {
+    congressStart=performance. now()
     const data = loadNames();
     for (let i = 0; i < 100; i++) {
       createPolitician(processData(data, true), true); // For Senate
@@ -105,21 +103,25 @@ export default function Home() {
     console.log('Speaker of the House:', speaker.name, ',', speaker.leaning);
     console.log('Senate Majority Leader:', majorityLeader.name, ',', majorityLeader.leaning);
 
-    if(politicians.length===536){
-      console.log('correct number of politatns')
-    }else{
-      console.log(`number of poliatins:${politicians.lengt}`)
+    // make sure politicians generated correctley
+    var pCounter=politicians.length
+    if(pCounter===536){
+      console.log('correct number of politicians')
+    }else {
+      console.log(`incorrect nunmber of politicians:${politicians.length}`)
     }
+    congressEnd=performance.now()
   }
-
+console.log(`import time:${importEnd-importStart}`)
+console.log(`load in names time:${loadEnd-loadStart}`)
+console.log(`select speaker time:${selectEnd-selectStart}`)
+console.log(`congress time:${congressEnd-congressStart}`)
   return (
     <main>
       <Head>
         <title>Home Page</title>
       </Head>
-      <h1>Welcome to the Next.js Application</h1>
-      <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-      <p>This page logs performance data on load and writes it to a file.</p>
+    <p>this works</p>
     </main>
   );
 }
