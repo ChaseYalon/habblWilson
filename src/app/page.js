@@ -1,32 +1,19 @@
 import Image from "next/image";
 import Head from 'next/head';
 const fs = require('fs');
-// why is this here (TODO: check then delete)
 const { performance } = require('perf_hooks');
 
-//I know this is gross code (TODO: make suck less (no weird undefined variables like that))
-let importStart;
-let importEnd;
-let loadStart;
-let loadEnd;
-let processStart;
-let processEnd;
-let selectStart;
-let selectEnd;
-let congressStart;
-let congressEnd;
+let importStart, importEnd, loadStart, loadEnd, processStart, processEnd, selectStart, selectEnd, congressStart, congressEnd;
 
-importStart=performance. now()
+importStart = performance.now();
 const { Clause, Politician, Issue, Bill, Committee } = require('./classesAndObjects.js');
 const { abortion, immigration, LGBTQPLUSRights, gunRights } = require('./IssuesAndClauses.js');
-importEnd=performance.now()
+importEnd = performance.now();
 
 export default function Home() {
   var politicians = [];
   var hor = [];
   var senate = [];
-
-
 
   function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -39,26 +26,25 @@ export default function Home() {
   }
 
   function loadNames() {
-    loadStart=performance.now()
+    loadStart = performance.now();
     const data = require('/home/ChaseYalon/habblWilson/public/names.json');
-    loadEnd=performance. now()
+    loadEnd = performance.now();
     return data;
   }
 
   function processData(data, male) { 
-    processStart=performance. now()
+    processStart = performance.now();
     var lastLength = data.last.length;
     var lastName = data.last[getRandomInt(0, lastLength)];
     var firstName = male ? data.boys[getRandomInt(0, data.boys.length)] : data.girls[getRandomInt(0, data.girls.length)];
-    processEnd.performance.now()
+    processEnd = performance.now();
     return `${firstName} ${lastName}`;
   }
 
   function selectLeader(members, isMajorityLiberal) {
-    selectStart=performance. now()
+    selectStart = performance.now();
     var majorityGroup = members.filter(member => isMajorityLiberal ? member.leaning > 0 : member.leaning < 0);
     var minorityGroup = members.filter(member => isMajorityLiberal ? member.leaning < 0 : member.leaning > 0);
-
     var minorityIncludeCount = Math.floor(getRandomArbitrary(0, minorityGroup.length / 2));
     var combinedGroup = majorityGroup.slice();
 
@@ -72,7 +58,7 @@ export default function Home() {
       var currentDifference = Math.abs(member.leaning - averageLeaning);
       return currentDifference < closestDifference ? member : closest;
     }, combinedGroup[0]);
-    selectEnd=performance. now()
+    selectEnd = performance.now();
     return selectedLeader;
   }
 
@@ -88,7 +74,7 @@ export default function Home() {
   }
 
   function createCongress() {
-    congressStart=performance. now()
+    congressStart = performance.now();
     const data = loadNames();
     for (let i = 0; i < 100; i++) {
       createPolitician(processData(data, true), true); // For Senate
@@ -102,20 +88,20 @@ export default function Home() {
 
     console.log('Speaker of the House:', speaker.name, ',', speaker.leaning);
     console.log('Senate Majority Leader:', majorityLeader.name, ',', majorityLeader.leaning);
-
-    // make sure politicians generated correctley
-    var pCounter=politicians.length
-    if(pCounter===536){
-      console.log('correct number of politicians')
-    }else {
-      console.log(`incorrect nunmber of politicians:${politicians.length}`)
+    var pCounter = politicians.length;
+    if (pCounter === 536) {
+      console.log('correct number of politicians');
+    } else {
+      console.log(`incorrect number of politicians: ${politicians.length}`);
     }
-    congressEnd=performance.now()
+    congressEnd = performance.now();
   }
-console.log(`import time:${importEnd-importStart}`)
-console.log(`load in names time:${loadEnd-loadStart}`)
-console.log(`select speaker time:${selectEnd-selectStart}`)
-console.log(`congress time:${congressEnd-congressStart}`)
+
+  console.log(`import time: ${importEnd - importStart}`);
+  console.log(`process time: ${processEnd - processStart}`);
+  console.log(`load in names time: ${loadEnd - loadStart}`);
+  console.log(`select speaker time: ${selectEnd - selectStart}`);
+  console.log(`congress time: ${congressEnd - congressStart}`);
   return (
     <main>
       <Head>
