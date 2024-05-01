@@ -96,12 +96,14 @@ export default function Home() {
     }
     congressEnd = performance.now();
   }
-
   console.log(`import time: ${importEnd - importStart}`);
   console.log(`process time: ${processEnd - processStart}`);
   console.log(`load in names time: ${loadEnd - loadStart}`);
   console.log(`select speaker time: ${selectEnd - selectStart}`);
   console.log(`congress time: ${congressEnd - congressStart}`);
+  module.exports={
+    politicians,hor,senate,createCongress
+  }
   return (
     <main>
       <Head>

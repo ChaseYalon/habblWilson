@@ -99,7 +99,6 @@ class Bill {
     }
   }
 }
-
 var hor = {
   reps: [], // Put list of reps here
   committees: [], // Put list of committees here

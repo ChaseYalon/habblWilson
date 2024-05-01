@@ -64,7 +64,7 @@ var gunRights=new Issue('Gun Rights',createDistFromFunction(x=>x ** 3),[noRestri
     var tenDayWaitingPeriods = new Clause('Ten Day Waiting Periods',0.2,'Resolved, there must be a delay of 10 days between your purchase of a firearm and your recipt of same.',[],0)
     var ammoSepreate = new Clause('Ammo Sperate',0.4,'Resolved, you must seek sperate approval and registration for an ammo from your firearm(s)',[],0)
     var mandatoryCertification = new Clause('Mandatory Certification',0.3,'Resolved after the purchase and before the recipt of a firearm and every five years after recipt, one must attend a mandatory federal saftey course',[],10000000)
-
+//create aggriculture issue
     /*add more, lots more */
 module. Exports={
     abbortion,immagration,LGBTQPLUSRights,gunRights
