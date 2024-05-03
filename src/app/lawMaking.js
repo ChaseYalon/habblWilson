@@ -20,3 +20,16 @@ console. Warn('this should go to judicary also but gameplay dicates one issue pe
 var armedServices=new Committee('Armed services',[],null,abbortion,senate,[])
 var judicary=new Committee('Senate Judicary committie',[],null,LGBTQPLUSRights,senate,[])
 var finance=new Committee('Fincace committie',[],null,gunRights,senate,[])
+/*
+1) rep sponsors a bill, hold which chamber that rep is from
+var proposalChamber=politional.chamber(that a thing?)
+
+2) Speaker refers it to commtiite
+console.error('how do you do this')
+
+3)
+console.error('where are players going to come into this')
+committie.pass(bill)
+
+4)
+*/
