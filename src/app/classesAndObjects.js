@@ -41,12 +41,13 @@ class Issue {
 }
 
 class Committee {
-  constructor(name, members, head, issue, body) {
+  constructor(name, members, head, issue, body, legeslation) {
     this.name = name;
     this.members = members;
     this.head = head;
     this.issue = issue;
     this.body = body;
+    this.legeslation=legeslation
   }
 
   assignMembers(members) {
@@ -55,6 +56,9 @@ class Committee {
 
   assignLeader(leader) {
     this.leader = leader;
+  }
+  giveLeislation(bill){
+    this.legeslation+=bill
   }
 }
 
@@ -65,8 +69,8 @@ class Bill {
     this.body = body;
     this.onePassed = onePassed;
     this.leaning = issue.leaning;
+    console.error('bill leaning is very wrongly calcualted, the bill could lean one way or annother on a given issue')
   }
-
   addClause(clause) {
     this.clauses.push(clause);
     this.leaning += clause.leaning;
@@ -80,7 +84,9 @@ class Bill {
     }
     return conflicts;
   }
-
+  assignToCommitte(committie){
+    committie.giveLeislation(this.bill)
+  }
   pass(committee) {
     var compromiseCoefficient = 0.1;
 
@@ -98,7 +104,11 @@ class Bill {
       }
     }
   }
+  passChamber(chamber){
+    console.error('figure out how to pass chamber')
+  }
 }
+
 var hor = {
   reps: [], // Put list of reps here
   committees: [], // Put list of committees here
